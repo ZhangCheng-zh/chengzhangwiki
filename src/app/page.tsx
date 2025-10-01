@@ -31,7 +31,7 @@ export default function Home() {
       <main className={styles.main}>
         <section className={styles.hero}>
           <h1>Projects · System Design · Coding</h1>
-          <p>Collected notes,shipped work, and reference links for fast recall.</p>
+          <p>Collected notes, shipped work, and reference links for fast recall.</p>
         </section>
 
         <section aria-label="Directory">
