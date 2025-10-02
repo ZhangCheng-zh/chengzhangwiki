@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const counterMeta = [
   { id: "ai", label: "AI likes" },
@@ -16,6 +16,13 @@ type LikeSnapshot = {
 };
 
 const formatter = new Intl.NumberFormat("en-US");
+
+function createInitialCounts(): Record<CounterId, number> {
+  return counterMeta.reduce((acc, meta) => {
+    acc[meta.id] = 0;
+    return acc;
+  }, {} as Record<CounterId, number>);
+}
 
 async function postToggle(id: CounterId, liked: boolean) {
   const response = await fetch("/api/likes", {
@@ -35,10 +42,16 @@ async function postToggle(id: CounterId, liked: boolean) {
 }
 
 export function useLikes() {
-  const [baseCounts, setBaseCounts] = useState<Record<CounterId, number>>({});
+  const [baseCounts, setBaseCounts] = useState<Record<CounterId, number>>(createInitialCounts);
+  const [displayCounts, setDisplayCounts] = useState<Record<CounterId, number>>(createInitialCounts);
   const [activeId, setActiveId] = useState<CounterId | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [pending, setPending] = useState(false);
+  const displayRef = useRef(displayCounts);
+
+  useEffect(() => {
+    displayRef.current = displayCounts;
+  }, [displayCounts]);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,11 +68,7 @@ export function useLikes() {
           return;
         }
 
-        const initialCounts: Record<CounterId, number> = {
-          ai: 0,
-          human: 0,
-        };
-
+        const initialCounts = createInitialCounts();
         for (const entry of data.likes) {
           initialCounts[entry.id] = entry.value;
         }
@@ -82,6 +91,46 @@ export function useLikes() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!loaded) {
+      return;
+    }
+
+    const start = displayRef.current;
+    const targets = counterMeta.reduce((acc, meta) => {
+      acc[meta.id] = baseCounts[meta.id] ?? 0;
+      return acc;
+    }, {} as Record<CounterId, number>);
+
+    const duration = 240;
+    const startTime = performance.now();
+    let frameId: number;
+
+    const step = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const nextCounts = createInitialCounts();
+
+      for (const meta of counterMeta) {
+        const initial = start[meta.id] ?? 0;
+        const target = targets[meta.id];
+        const value = Math.round(initial + (target - initial) * progress);
+        nextCounts[meta.id] = value;
+      }
+
+      setDisplayCounts(nextCounts);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(step);
+      }
+    };
+
+    frameId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [baseCounts, loaded]);
+
   const toggle = useCallback(
     async (targetId: CounterId) => {
       if (!loaded || pending) {
@@ -92,6 +141,22 @@ export function useLikes() {
       const previousBase = { ...baseCounts };
       const nextActive = previousActive === targetId ? null : targetId;
 
+      const optimistic = { ...baseCounts };
+
+      if (nextActive === targetId) {
+        optimistic[targetId] = (optimistic[targetId] ?? 0) + 1;
+      } else {
+        optimistic[targetId] = Math.max(0, (optimistic[targetId] ?? 0) - 1);
+      }
+
+      if (previousActive && previousActive !== targetId) {
+        optimistic[previousActive] = Math.max(
+          0,
+          (optimistic[previousActive] ?? 0) - 1,
+        );
+      }
+
+      setBaseCounts(optimistic);
       setActiveId(nextActive);
       setPending(true);
 
@@ -107,7 +172,7 @@ export function useLikes() {
         const nextValue = await postToggle(targetId, nextActive === targetId);
         setBaseCounts((current) => ({
           ...current,
-          [targetId]: nextActive === targetId ? Math.max(0, nextValue - 1) : nextValue,
+          [targetId]: nextValue,
         }));
       } catch (error) {
         console.error(error);
@@ -122,19 +187,15 @@ export function useLikes() {
 
   const counters = useMemo(() => {
     return counterMeta.map((meta) => {
-      const base = baseCounts[meta.id] ?? 0;
-      const active = activeId === meta.id;
-      const value = base + (active ? 1 : 0);
-
+      const value = displayCounts[meta.id] ?? 0;
       return {
         ...meta,
-        display: loaded ? formatter.format(value) : "—",
-        base,
+        display: loaded ? formatter.format(value) : "0",
         value,
-        active,
+        active: activeId === meta.id,
       };
     });
-  }, [activeId, baseCounts, loaded]);
+  }, [activeId, displayCounts, loaded]);
 
   return {
     counters,
