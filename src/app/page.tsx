@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import styles from "./page.module.css";
 
 const sections = [
@@ -16,9 +19,26 @@ const sections = [
   },
 ];
 
+const counterMeta = [
+  { id: "ai", label: "AI likes", base: 1024 },
+  { id: "human", label: "Human likes", base: 256 },
+] as const;
+
+type CounterId = (typeof counterMeta)[number]["id"];
+
+type ActiveState = CounterId | null;
+
+const formatter = new Intl.NumberFormat("en-US");
+
 const emailAddress = "pro.zhangcheng@gmail.com";
 
 export default function Home() {
+  const [activeId, setActiveId] = useState<ActiveState>(null);
+
+  const toggleLike = (id: CounterId) => {
+    setActiveId((current) => (current === id ? null : id));
+  };
+
   return (
     <div className={styles.page}>
       <header className={styles.topBar}>
@@ -51,6 +71,41 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section className={styles.stats} aria-label="Likes">
+          {counterMeta.map((counter) => {
+            const isActive = activeId === counter.id;
+            const heartClass = isActive
+              ? `${styles.statIcon} ${styles.statIconActive}`
+              : styles.statIcon;
+            const displayed = formatter.format(counter.base + (isActive ? 1 : 0));
+
+            return (
+              <button
+                key={counter.id}
+                type="button"
+                className={styles.statCard}
+                aria-pressed={isActive}
+                onClick={() => toggleLike(counter.id)}
+              >
+                <span className={styles.statIconWrap} aria-hidden="true">
+                  <svg
+                    className={heartClass}
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 21s-5.45-4.35-8.36-7.26C1.28 11.38 1 8.44 3.07 6.36a4.33 4.33 0 0 1 6.12 0L12 9.18l2.81-2.82a4.33 4.33 0 0 1 6.12 0c2.07 2.08 1.79 5.02-.57 7.38C17.45 16.65 12 21 12 21Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
+                <span className={styles.statValue}>{displayed}</span>
+                <span className={styles.statLabel}>{counter.label}</span>
+              </button>
+            );
+          })}
         </section>
       </main>
 
