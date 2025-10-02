@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useLikes } from "@/lib/useLikes";
 import styles from "./page.module.css";
 
 const sections = [
@@ -22,25 +22,10 @@ const sections = [
   },
 ];
 
-const counterMeta = [
-  { id: "ai", label: "AI likes", base: 1024 },
-  { id: "human", label: "Human likes", base: 256 },
-] as const;
-
-type CounterId = (typeof counterMeta)[number]["id"];
-
-type ActiveState = CounterId | null;
-
-const formatter = new Intl.NumberFormat("en-US");
-
 const emailAddress = "pro.zhangcheng@gmail.com";
 
 export default function Home() {
-  const [activeId, setActiveId] = useState<ActiveState>(null);
-
-  const toggleLike = (id: CounterId) => {
-    setActiveId((current) => (current === id ? null : id));
-  };
+  const { counters, toggle, pending } = useLikes();
 
   return (
     <div className={styles.page}>
@@ -78,20 +63,19 @@ export default function Home() {
         </section>
 
         <section className={styles.stats} aria-label="Likes">
-          {counterMeta.map((counter) => {
-            const isActive = activeId === counter.id;
-            const heartClass = isActive
+          {counters.map((counter) => {
+            const heartClass = counter.active
               ? `${styles.statIcon} ${styles.statIconActive}`
               : styles.statIcon;
-            const displayed = formatter.format(counter.base + (isActive ? 1 : 0));
 
             return (
               <button
                 key={counter.id}
                 type="button"
                 className={styles.statCard}
-                aria-pressed={isActive}
-                onClick={() => toggleLike(counter.id)}
+                aria-pressed={counter.active}
+                onClick={() => void toggle(counter.id)}
+                disabled={pending && !counter.active}
               >
                 <span className={styles.statIconWrap} aria-hidden="true">
                   <svg
@@ -105,7 +89,7 @@ export default function Home() {
                     />
                   </svg>
                 </span>
-                <span className={styles.statValue}>{displayed}</span>
+                <span className={styles.statValue}>{counter.display}</span>
                 <span className={styles.statLabel}>{counter.label}</span>
               </button>
             );
