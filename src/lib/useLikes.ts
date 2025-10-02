@@ -3,28 +3,21 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const counterMeta = [
-  { id: "ai", label: "AI likes", base: 1024 },
-  { id: "human", label: "Human likes", base: 256 },
+  { id: "ai", label: "AI likes" },
+  { id: "human", label: "Human likes" },
 ] as const;
 
 type CounterMeta = (typeof counterMeta)[number];
 export type CounterId = CounterMeta["id"];
 
-interface LikeSnapshot {
+type LikeSnapshot = {
   id: CounterId;
   value: number;
-}
+};
 
 const formatter = new Intl.NumberFormat("en-US");
 
-function createInitialState() {
-  return counterMeta.reduce((acc, item) => {
-    acc[item.id] = item.base;
-    return acc;
-  }, {} as Record<CounterId, number>);
-}
-
-async function apiToggle(id: CounterId, liked: boolean) {
+async function postToggle(id: CounterId, liked: boolean) {
   const response = await fetch("/api/likes", {
     method: "POST",
     headers: {
@@ -42,8 +35,9 @@ async function apiToggle(id: CounterId, liked: boolean) {
 }
 
 export function useLikes() {
-  const [counts, setCounts] = useState<Record<CounterId, number>>(createInitialState);
+  const [baseCounts, setBaseCounts] = useState<Record<CounterId, number>>({});
   const [activeId, setActiveId] = useState<CounterId | null>(null);
+  const [loaded, setLoaded] = useState(false);
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
@@ -57,33 +51,27 @@ export function useLikes() {
         }
 
         const data = (await response.json()) as { likes: LikeSnapshot[] };
-
         if (!data?.likes || cancelled) {
           return;
         }
 
-        const nextCounts = createInitialState();
-        let nextActive: CounterId | null = null;
+        const initialCounts: Record<CounterId, number> = {
+          ai: 0,
+          human: 0,
+        };
 
         for (const entry of data.likes) {
-          if (!entry) {
-            continue;
-          }
-
-          if (entry.id in nextCounts) {
-            nextCounts[entry.id] = entry.value;
-          }
-
-          const meta = counterMeta.find((item) => item.id === entry.id);
-          if (meta && entry.value > meta.base) {
-            nextActive = entry.id;
-          }
+          initialCounts[entry.id] = entry.value;
         }
 
-        setCounts(nextCounts);
-        setActiveId(nextActive);
+        setBaseCounts(initialCounts);
+        setActiveId(null);
       } catch (error) {
         console.error("Failed to load likes", error);
+      } finally {
+        if (!cancelled) {
+          setLoaded(true);
+        }
       }
     }
 
@@ -96,61 +84,62 @@ export function useLikes() {
 
   const toggle = useCallback(
     async (targetId: CounterId) => {
-      if (pending) {
+      if (!loaded || pending) {
         return;
       }
 
       const previousActive = activeId;
-      const previousCounts = { ...counts };
+      const previousBase = { ...baseCounts };
+      const nextActive = previousActive === targetId ? null : targetId;
 
-      const nextActive = activeId === targetId ? null : targetId;
-      const optimistic = createInitialState();
-      for (const meta of counterMeta) {
-        const isActive = meta.id === nextActive;
-        optimistic[meta.id] = meta.base + (isActive ? 1 : 0);
-      }
-
-      setPending(true);
-      setCounts(optimistic);
       setActiveId(nextActive);
+      setPending(true);
 
       try {
         if (previousActive && previousActive !== targetId) {
-          const resetValue = await apiToggle(previousActive, false);
-          setCounts((current) => ({
+          const resetValue = await postToggle(previousActive, false);
+          setBaseCounts((current) => ({
             ...current,
             [previousActive]: resetValue,
           }));
         }
 
-        const nextValue = await apiToggle(targetId, nextActive === targetId);
-        setCounts((current) => ({
+        const nextValue = await postToggle(targetId, nextActive === targetId);
+        setBaseCounts((current) => ({
           ...current,
-          [targetId]: nextValue,
+          [targetId]: nextActive === targetId ? Math.max(0, nextValue - 1) : nextValue,
         }));
       } catch (error) {
         console.error(error);
-        setCounts(previousCounts);
+        setBaseCounts(previousBase);
         setActiveId(previousActive);
       } finally {
         setPending(false);
       }
     },
-    [activeId, counts, pending]
+    [activeId, baseCounts, loaded, pending]
   );
 
-  const formattedCounts = useMemo(() => {
-    return counterMeta.map((meta) => ({
-      ...meta,
-      value: counts[meta.id],
-      display: formatter.format(counts[meta.id]),
-      active: activeId === meta.id,
-    }));
-  }, [activeId, counts]);
+  const counters = useMemo(() => {
+    return counterMeta.map((meta) => {
+      const base = baseCounts[meta.id] ?? 0;
+      const active = activeId === meta.id;
+      const value = base + (active ? 1 : 0);
+
+      return {
+        ...meta,
+        display: loaded ? formatter.format(value) : "—",
+        base,
+        value,
+        active,
+      };
+    });
+  }, [activeId, baseCounts, loaded]);
 
   return {
-    counters: formattedCounts,
+    counters,
     toggle,
     pending,
+    loaded,
   };
 }

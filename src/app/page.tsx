@@ -25,7 +25,7 @@ const sections = [
 const emailAddress = "pro.zhangcheng@gmail.com";
 
 export default function Home() {
-  const { counters, toggle, pending } = useLikes();
+  const { counters, toggle, pending, loaded } = useLikes();
 
   return (
     <div className={styles.page}>
@@ -75,7 +75,7 @@ export default function Home() {
                 className={styles.statCard}
                 aria-pressed={counter.active}
                 onClick={() => void toggle(counter.id)}
-                disabled={pending && !counter.active}
+                disabled={pending || !loaded}
               >
                 <span className={styles.statIconWrap} aria-hidden="true">
                   <svg

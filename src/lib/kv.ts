@@ -7,11 +7,6 @@ const LIKE_KEYS = {
 
 type LikeId = keyof typeof LIKE_KEYS;
 
-const DEFAULT_COUNTS: Record<LikeId, number> = {
-  ai: 1024,
-  human: 256,
-};
-
 let client: RedisClientType | null = null;
 
 async function getClient(): Promise<RedisClientType> {
@@ -51,7 +46,7 @@ export async function getLikes(): Promise<LikeSnapshot[]> {
     const raw = results[index];
     return {
       id,
-      value: raw !== null ? Number(raw) : DEFAULT_COUNTS[id],
+      value: raw !== null ? Number(raw) : 0,
     } satisfies LikeSnapshot;
   });
 }
@@ -59,8 +54,9 @@ export async function getLikes(): Promise<LikeSnapshot[]> {
 export async function setLike(id: LikeId, liked: boolean) {
   const redis = await getClient();
   const key = LIKE_KEYS[id];
-  const base = DEFAULT_COUNTS[id];
-  const target = liked ? base + 1 : base;
+  const currentRaw = await redis.get(key);
+  const current = currentRaw !== null ? Number(currentRaw) : 0;
+  const target = liked ? current + 1 : Math.max(0, current - 1);
   await redis.set(key, target.toString());
   return target;
 }
