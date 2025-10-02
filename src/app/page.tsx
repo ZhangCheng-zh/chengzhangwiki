@@ -7,14 +7,17 @@ import styles from "./page.module.css";
 const sections = [
   {
     title: "Projects",
+    caption: "Verify tech stack with real projects.",
     links: [{ label: "NewsFeed", href: "https://newsfeed.chengzhang.wiki" }],
   },
   {
     title: "System Design",
+    caption: "Design scalable systems from scratch.",
     links: [],
   },
   {
     title: "Coding",
+    caption: "Data structure and algorithm is foundation.",
     links: [],
   },
 ];
@@ -59,6 +62,7 @@ export default function Home() {
             {sections.map((section) => (
               <li key={section.title}>
                 <span className={styles.entryTitle}>{section.title}</span>
+                <p className={styles.entryCaption}>{section.caption}</p>
                 {section.links?.length ? (
                   <ul className={styles.entryLinks}>
                     {section.links.map((link) => (
