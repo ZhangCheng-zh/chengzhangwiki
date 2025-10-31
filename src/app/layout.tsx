@@ -16,16 +16,16 @@ const pageDescription =
   "A personal knowledge base capturing product craft, design systems, and collaborative playbooks.";
 
 export const metadata: Metadata = {
-  title: "Chengzhang Wiki",
+  title: "CZ TECH - Software Engineer & Tech Instructor",
   description: pageDescription,
   openGraph: {
-    title: "Chengzhang Wiki",
+    title: "CZ TECH",
     description: pageDescription,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chengzhang Wiki",
+    title: "CZ TECH",
     description: pageDescription,
   },
 };

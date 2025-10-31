@@ -22,7 +22,7 @@ const sections = [
   },
 ];
 
-const emailAddress = "pro.zhangcheng@gmail.com";
+const emailAddress = "cztech0x3f@gmail.com";
 
 export default function Home() {
   const { counters, toggle, pending, loaded } = useLikes();
@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <header className={styles.topBar}>
-        <span className={styles.brand}>Chengzhang Wiki</span>
+        <span className={styles.brand}>CZ Tech</span>
         <Link className={styles.contactLink} href={`mailto:${emailAddress}`}>
           Contact · {emailAddress}
         </Link>
@@ -38,8 +38,9 @@ export default function Home() {
 
       <main className={styles.main}>
         <section className={styles.hero}>
-          <h1>Projects · System Design · Coding</h1>
-          <p>Collected notes, shipped work, and reference links for fast recall.</p>
+          <h1>I'm CZ</h1>
+          <h2>Software Engineer & Tech Instructor</h2>
+          <p>Specializing in scalable systems , full-stack development, and career growth.</p>
         </section>
 
         <section aria-label="Directory">
@@ -98,7 +99,7 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        <p>© {new Date().getFullYear()} Chengzhang Wiki</p>
+        <p>© {new Date().getFullYear()} CZ Tech</p>
       </footer>
     </div>
   );

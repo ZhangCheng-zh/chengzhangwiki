@@ -43,7 +43,13 @@
 .hero {
   max-width: 720px;
   display: grid;
-  gap: 1.2rem;
+  gap: clamp(0.75rem, 2vw, 1rem);
+}
+
+.hero h1,
+.hero h2,
+.hero p {
+  margin: 0;
 }
 
 .hero p {
