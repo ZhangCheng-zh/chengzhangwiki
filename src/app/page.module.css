@@ -63,6 +63,92 @@
   flex-wrap: wrap;
 }
 
+.connect {
+  width: min(960px, 100%);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(14, 165, 233, 0.12));
+  padding: clamp(2.5rem, 6vw, 3.5rem);
+}
+
+.connectInner {
+  display: grid;
+  gap: clamp(1.25rem, 4vw, 2rem);
+  text-align: center;
+  align-items: center;
+}
+
+.connectInner h2 {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2.3rem);
+}
+
+.connectInner > p {
+  margin: 0 auto;
+  max-width: 50ch;
+  color: rgba(17, 24, 39, 0.7);
+  font-size: 1rem;
+}
+
+.connectGrid {
+  display: grid;
+  gap: clamp(1rem, 4vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  width: 100%;
+}
+
+.connectCard {
+  background: #fff;
+  border-radius: 20px;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.08);
+}
+
+.connectCard h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+.connectCard p {
+  margin: 0;
+  color: rgba(17, 24, 39, 0.65);
+  font-size: 0.95rem;
+}
+
+.connectIcon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.connectAction {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 14px;
+  padding: 0.65rem 1rem;
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid transparent;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: rgba(17, 24, 39, 0.9);
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.connectAction:hover {
+  background: rgba(59, 130, 246, 0.26);
+  border-color: rgba(59, 130, 246, 0.35);
+  transform: translateY(-1px);
+}
+
+.connectAction:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.4);
+  outline-offset: 2px;
+}
+
 .statCard {
   display: inline-flex;
   align-items: center;
@@ -198,6 +284,42 @@
   .statLabel,
   .entryCaption {
     color: rgba(229, 231, 235, 0.7);
+  }
+
+  .connect {
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.18),
+      rgba(59, 130, 246, 0.14)
+    );
+  }
+
+  .connectInner > p {
+    color: rgba(229, 231, 235, 0.75);
+  }
+
+  .connectCard {
+    background: rgba(17, 24, 39, 0.7);
+    border-color: rgba(229, 231, 235, 0.12);
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.3);
+  }
+
+  .connectCard p {
+    color: rgba(229, 231, 235, 0.72);
+  }
+
+  .connectAction {
+    background: rgba(96, 165, 250, 0.22);
+    color: rgba(243, 244, 246, 0.95);
+  }
+
+  .connectAction:hover {
+    background: rgba(96, 165, 250, 0.32);
+    border-color: rgba(191, 219, 254, 0.5);
+  }
+
+  .connectAction:focus-visible {
+    outline-color: rgba(191, 219, 254, 0.6);
   }
 
   .statCard {

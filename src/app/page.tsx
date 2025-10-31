@@ -24,6 +24,24 @@ const sections = [
 
 const emailAddress = "cztech0x3f@gmail.com";
 
+const touchChannels = [
+  {
+    icon: "💼",
+    title: "Connect on LinkedIn",
+    caption: "Reach out for collaborations, mentorship, or open opportunities.",
+    actionLabel: "Visit LinkedIn Profile",
+    href: "https://www.linkedin.com/in/cheng-zhang-27b66379/",
+    external: true,
+  },
+  {
+    icon: "✉️",
+    title: "Email to Me",
+    caption: "Send details and we'll follow up within one business day.",
+    actionLabel: "Email CZ Tech",
+    href: `mailto:${emailAddress}`,
+  },
+];
+
 export default function Home() {
   const { counters, toggle, pending, loaded } = useLikes();
 
@@ -95,6 +113,31 @@ export default function Home() {
               </button>
             );
           })}
+        </section>
+
+        <section className={styles.connect} aria-label="Get in touch">
+          <div className={styles.connectInner}>
+            <h2>Get in Touch</h2>
+            <div className={styles.connectGrid}>
+              {touchChannels.map((channel) => (
+                <article key={channel.title} className={styles.connectCard}>
+                  <span className={styles.connectIcon} aria-hidden="true">
+                    {channel.icon}
+                  </span>
+                  <h3>{channel.title}</h3>
+                  <p>{channel.caption}</p>
+                  <Link
+                    href={channel.href}
+                    className={styles.connectAction}
+                    target={channel.external ? "_blank" : undefined}
+                    rel={channel.external ? "noreferrer" : undefined}
+                  >
+                    {channel.actionLabel}
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
         </section>
       </main>
 
