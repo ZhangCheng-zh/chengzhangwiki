@@ -67,7 +67,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <section className={styles.hero}>
-          <h1>I'm CZ</h1>
+          <h1>I&apos;m CZ</h1>
           <h2>Software Engineer & Tech Instructor</h2>
           <p>Specializing in scalable systems , full-stack development, and career growth.</p>
         </section>
