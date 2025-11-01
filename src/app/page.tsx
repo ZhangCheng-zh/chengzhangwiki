@@ -13,7 +13,18 @@ const sections = [
   {
     title: "System Design",
     caption: "Design scalable systems from scratch.",
-    links: [],
+    links: [
+      { label: "Deep Dive · ZooKeeper", href: "https://link.excalidraw.com/readonly/ggP7RIPSsIH6P6MLkxGN" },
+      { label: "Deep Dive · Flink", href: "https://link.excalidraw.com/readonly/SVBcWIs8FMw0fIl48Ak0" },
+      { label: "Design · Ad Click Aggregator", href: "https://link.excalidraw.com/readonly/aiVo6ny8IaXNKGY5S5JI" },
+      { label: "Design · Google Docs", href: "https://link.excalidraw.com/readonly/XT0MRyKkGzVYd5uUh9lh" },
+      { label: "Design · YouTube", href: "https://link.excalidraw.com/readonly/ta8aFaiZhtXm7XtT0gh7" },
+      { label: "Design · Job Scheduler", href: "https://link.excalidraw.com/readonly/drczAAXLFOSpiYyuK4VN" },
+      { label: "Design · Payment Service", href: "https://link.excalidraw.com/readonly/Ef5yJYOpmWJE71hbleQD" },
+      { label: "Design · Web Crawler", href: "https://link.excalidraw.com/readonly/DCOBjcYrLBawSZSguRGL" },
+      { label: "Design · Distributed Cache", href: "https://link.excalidraw.com/readonly/UwZPV9ewJqDtD9guCYj4" },
+      { label: "Design · Rate Limiter", href: "https://link.excalidraw.com/readonly/7oqRhxJFtFRZioyPyhKi" },
+    ],
   },
   {
     title: "Coding",
@@ -49,7 +60,7 @@ export default function Home() {
     <div className={styles.page}>
       <header className={styles.topBar}>
         <span className={styles.brand}>CZ Tech</span>
-        <Link className={styles.contactLink} href={`mailto:${emailAddress}`}>
+        <Link className={styles.contactLink} href="#get-in-touch">
           Contact · {emailAddress}
         </Link>
       </header>
@@ -59,26 +70,6 @@ export default function Home() {
           <h1>I'm CZ</h1>
           <h2>Software Engineer & Tech Instructor</h2>
           <p>Specializing in scalable systems , full-stack development, and career growth.</p>
-        </section>
-
-        <section aria-label="Directory">
-          <ul className={styles.list}>
-            {sections.map((section) => (
-              <li key={section.title}>
-                <span className={styles.entryTitle}>{section.title}</span>
-                <p className={styles.entryCaption}>{section.caption}</p>
-                {section.links?.length ? (
-                  <ul className={styles.entryLinks}>
-                    {section.links.map((link) => (
-                      <li key={link.href}>
-                        <Link href={link.href}>{link.label}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </li>
-            ))}
-          </ul>
         </section>
 
         <section className={styles.stats} aria-label="Likes">
@@ -115,9 +106,30 @@ export default function Home() {
           })}
         </section>
 
-        <section className={styles.connect} aria-label="Get in touch">
+        <section className={styles.directory} aria-label="Directory">
+          {sections.map((section) => (
+            <section key={section.title} className={styles.directorySection}>
+              <header className={styles.directoryHeader}>
+                <h2 className={styles.entryTitle}>{section.title}</h2>
+                <p className={styles.entryCaption}>{section.caption}</p>
+              </header>
+              {section.links?.length ? (
+                <ul className={styles.entryLinks}>
+                  {section.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href}>{link.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </section>
+          ))}
+        </section>
+
+        <section id="get-in-touch" className={styles.connect} aria-label="Get in touch">
           <div className={styles.connectInner}>
             <h2>Get in Touch</h2>
+            <p>Choose the channel that fits best and we&apos;ll coordinate next steps.</p>
             <div className={styles.connectGrid}>
               {touchChannels.map((channel) => (
                 <article key={channel.title} className={styles.connectCard}>
