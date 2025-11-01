@@ -82,5 +82,41 @@ export const systemDesignExamples = [
   {
     label: "Design · TicketMaster",
     href: "https://link.excalidraw.com/readonly/3HR0GoexccB557FznOlk"
+  },
+  {
+    label: "Design · Yelp",
+    href: "https://link.excalidraw.com/readonly/WuRQAziI3l89L4bHl5O3"
+  },
+  {
+    label: "Design · News Feed",
+    href: "https://link.excalidraw.com/readonly/46Y3cz4yV4d9ZyQ5Y2U4"
+  },
+  {
+    label: "Design · Local Delivery",
+    href: "https://link.excalidraw.com/readonly/OTy0UIDHI9hp7uRhgeBU"
+  },
+  {
+    label: "Design · Whatsapp",
+    href: "https://link.excalidraw.com/readonly/VxOQKkTwfPn56S8wdus1"
+  },
+  {
+    label: "Design · Instagram",
+    href: "https://link.excalidraw.com/readonly/OPclC3poi6mzGGYBSNFw"
+  },
+  {
+    label: "Design · Bit.ly",
+    href: "https://link.excalidraw.com/readonly/DOEhtoPtmWJ2U4nNUDo8"
+  },
+  {
+    label: "Design · Dropbox",
+    href: "https://link.excalidraw.com/readonly/h2YX6CNAeiREpSdJtKHD"
+  },
+  {
+    label: "Design · Price Tracking",
+    href: "https://link.excalidraw.com/readonly/R8grwwIaDVV3QmWnzVmb"
+  },
+  {
+    label: "design · Robinhood",
+    href: "https://link.excalidraw.com/readonly/ipwPtOrmMQ0qyaKLdIFC"
   }
 ] as const;
