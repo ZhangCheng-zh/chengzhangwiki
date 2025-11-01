@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { systemDesignExamples } from "@/data/systemDesignExamples";
 import { useLikes } from "@/lib/useLikes";
 import styles from "./page.module.css";
 
@@ -8,23 +9,12 @@ const sections = [
   {
     title: "Projects",
     caption: "Verify tech stack with real projects.",
-    links: [{ label: "NewsFeed", href: "https://newsfeed.chengzhang.wiki" }],
+    links: [{ label: "NewsFeed", href: "https://newsfeed.cztech.ca" }],
   },
   {
     title: "System Design",
     caption: "Design scalable systems from scratch.",
-    links: [
-      { label: "Deep Dive · ZooKeeper", href: "https://link.excalidraw.com/readonly/ggP7RIPSsIH6P6MLkxGN" },
-      { label: "Deep Dive · Flink", href: "https://link.excalidraw.com/readonly/SVBcWIs8FMw0fIl48Ak0" },
-      { label: "Design · Ad Click Aggregator", href: "https://link.excalidraw.com/readonly/aiVo6ny8IaXNKGY5S5JI" },
-      { label: "Design · Google Docs", href: "https://link.excalidraw.com/readonly/XT0MRyKkGzVYd5uUh9lh" },
-      { label: "Design · YouTube", href: "https://link.excalidraw.com/readonly/ta8aFaiZhtXm7XtT0gh7" },
-      { label: "Design · Job Scheduler", href: "https://link.excalidraw.com/readonly/drczAAXLFOSpiYyuK4VN" },
-      { label: "Design · Payment Service", href: "https://link.excalidraw.com/readonly/Ef5yJYOpmWJE71hbleQD" },
-      { label: "Design · Web Crawler", href: "https://link.excalidraw.com/readonly/DCOBjcYrLBawSZSguRGL" },
-      { label: "Design · Distributed Cache", href: "https://link.excalidraw.com/readonly/UwZPV9ewJqDtD9guCYj4" },
-      { label: "Design · Rate Limiter", href: "https://link.excalidraw.com/readonly/7oqRhxJFtFRZioyPyhKi" },
-    ],
+    links: systemDesignExamples,
   },
   {
     title: "Coding",
@@ -50,6 +40,7 @@ const touchChannels = [
     caption: "Send details and we'll follow up within one business day.",
     actionLabel: "Email CZ Tech",
     href: `mailto:${emailAddress}`,
+    external: true,
   },
 ];
 
@@ -117,7 +108,13 @@ export default function Home() {
                 <ul className={styles.entryLinks}>
                   {section.links.map((link) => (
                     <li key={link.href}>
-                      <Link href={link.href}>{link.label}</Link>
+                      <Link
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
