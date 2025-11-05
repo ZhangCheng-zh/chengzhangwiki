@@ -116,7 +116,7 @@ export const systemDesignExamples = [
     href: "https://link.excalidraw.com/readonly/R8grwwIaDVV3QmWnzVmb"
   },
   {
-    label: "design · Robinhood",
+    label: "Design · Robinhood",
     href: "https://link.excalidraw.com/readonly/ipwPtOrmMQ0qyaKLdIFC"
   }
 ] as const;
