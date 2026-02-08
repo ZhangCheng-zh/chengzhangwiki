@@ -10,8 +10,6 @@ const aiProjects = [
     name: "FoodLens",
     href: "https://foodlens.cztech.ca/",
     summary: "AI project exploring food imagery and discovery.",
-    tags: ["AI", "Food", "Vision"],
-    badge: "New",
     preview: {
       kicker: "FoodLens",
       title: "AI food exploration",
@@ -25,7 +23,6 @@ const aiProjects = [
     name: "NewsFeed",
     href: "https://newsfeed.cztech.ca",
     summary: "AI project exploring a modern news feed experience.",
-    tags: ["AI", "News", "Product"],
     preview: {
       kicker: "NewsFeed",
       title: "AI news flow",
@@ -39,7 +36,7 @@ const aiProjects = [
 
 const sections = [
   {
-    title: "Projects",
+    title: "AI Projects",
     caption: "Verify tech stack with real projects.",
     links: aiProjects.map((project) => ({
       label: project.name,
@@ -143,7 +140,14 @@ export default function Home() {
               {section.projects?.length ? (
                 <div className={styles.projectGrid}>
                   {section.projects.map((project) => (
-                    <article key={project.href} className={styles.projectCard}>
+                    <Link
+                      key={project.href}
+                      href={project.href}
+                      className={styles.projectCard}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${project.name}`}
+                    >
                       <div
                         className={styles.projectPreview}
                         style={{
@@ -162,34 +166,13 @@ export default function Home() {
                         </p>
                       </div>
                       <div className={styles.projectBody}>
-                        <div className={styles.projectHeading}>
-                          <h3 className={styles.projectName}>{project.name}</h3>
-                          {project.badge ? (
-                            <span className={styles.projectBadge}>{project.badge}</span>
-                          ) : null}
-                        </div>
+                        <h3 className={styles.projectName}>{project.name}</h3>
                         <p className={styles.projectSummary}>{project.summary}</p>
-                        <div className={styles.projectTags}>
-                          {project.tags.map((tag) => (
-                            <span key={tag} className={styles.projectTag}>
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <Link
-                          href={project.href}
-                          className={styles.projectAction}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          View project
-                        </Link>
                       </div>
-                    </article>
+                    </Link>
                   ))}
                 </div>
-              ) : null}
-              {section.links?.length ? (
+              ) : section.links?.length ? (
                 <ul className={styles.entryLinks}>
                   {section.links.map((link) => (
                     <li key={link.href}>

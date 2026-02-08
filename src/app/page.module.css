@@ -282,6 +282,19 @@
   border: 1px solid rgba(17, 24, 39, 0.12);
   background: #fff;
   box-shadow: 0 16px 28px rgba(15, 23, 42, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.projectCard:hover {
+  border-color: rgba(17, 24, 39, 0.2);
+  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.12);
+  transform: translateY(-2px);
+}
+
+.projectCard:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.4);
+  outline-offset: 2px;
 }
 
 .projectPreview {
@@ -316,26 +329,9 @@
   gap: 0.75rem;
 }
 
-.projectHeading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-}
-
 .projectName {
   margin: 0;
   font-size: 1.05rem;
-}
-
-.projectBadge {
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  border-radius: 999px;
-  padding: 0.2rem 0.55rem;
-  border: 1px solid rgba(17, 24, 39, 0.2);
-  color: rgba(17, 24, 39, 0.75);
 }
 
 .projectSummary {
@@ -343,46 +339,6 @@
   color: rgba(17, 24, 39, 0.65);
   font-size: 0.95rem;
   line-height: 1.5;
-}
-
-.projectTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.projectTag {
-  font-size: 0.75rem;
-  border-radius: 999px;
-  padding: 0.25rem 0.6rem;
-  border: 1px solid rgba(17, 24, 39, 0.12);
-  background: rgba(17, 24, 39, 0.06);
-  color: rgba(17, 24, 39, 0.7);
-}
-
-.projectAction {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  padding: 0.55rem 0.9rem;
-  background: rgba(17, 24, 39, 0.08);
-  border: 1px solid transparent;
-  font-weight: 600;
-  color: rgba(17, 24, 39, 0.85);
-  transition: background-color 0.2s ease, border-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.projectAction:hover {
-  background: rgba(17, 24, 39, 0.14);
-  border-color: rgba(17, 24, 39, 0.2);
-  transform: translateY(-1px);
-}
-
-.projectAction:focus-visible {
-  outline: 2px solid rgba(37, 99, 235, 0.4);
-  outline-offset: 2px;
 }
 
 .footer {
@@ -444,29 +400,8 @@
     box-shadow: 0 18px 36px rgba(15, 23, 42, 0.34);
   }
 
-  .projectBadge {
-    border-color: rgba(229, 231, 235, 0.35);
-    color: rgba(229, 231, 235, 0.85);
-  }
-
   .projectSummary {
     color: rgba(229, 231, 235, 0.72);
-  }
-
-  .projectTag {
-    background: rgba(148, 163, 184, 0.22);
-    border-color: rgba(148, 163, 184, 0.4);
-    color: rgba(229, 231, 235, 0.86);
-  }
-
-  .projectAction {
-    background: rgba(148, 163, 184, 0.22);
-    color: rgba(243, 244, 246, 0.95);
-  }
-
-  .projectAction:hover {
-    background: rgba(148, 163, 184, 0.32);
-    border-color: rgba(148, 163, 184, 0.45);
   }
 
   .connectAction {
