@@ -5,11 +5,47 @@ import { systemDesignExamples } from "@/data/systemDesignExamples";
 import { useLikes } from "@/lib/useLikes";
 import styles from "./page.module.css";
 
+const aiProjects = [
+  {
+    name: "FoodLens",
+    href: "https://foodlens.cztech.ca/",
+    summary: "AI project exploring food imagery and discovery.",
+    tags: ["AI", "Food", "Vision"],
+    badge: "New",
+    preview: {
+      kicker: "FoodLens",
+      title: "AI food exploration",
+      caption: "Live demo",
+      from: "#fef3c7",
+      to: "#fdba74",
+      text: "#111827",
+    },
+  },
+  {
+    name: "NewsFeed",
+    href: "https://newsfeed.cztech.ca",
+    summary: "AI project exploring a modern news feed experience.",
+    tags: ["AI", "News", "Product"],
+    preview: {
+      kicker: "NewsFeed",
+      title: "AI news flow",
+      caption: "Live demo",
+      from: "#dbeafe",
+      to: "#93c5fd",
+      text: "#0f172a",
+    },
+  },
+];
+
 const sections = [
   {
     title: "Projects",
     caption: "Verify tech stack with real projects.",
-    links: [{ label: "NewsFeed", href: "https://newsfeed.cztech.ca" }],
+    links: aiProjects.map((project) => ({
+      label: project.name,
+      href: project.href,
+    })),
+    projects: aiProjects,
   },
   {
     title: "System Design",
@@ -104,6 +140,55 @@ export default function Home() {
                 <h2 className={styles.entryTitle}>{section.title}</h2>
                 <p className={styles.entryCaption}>{section.caption}</p>
               </header>
+              {section.projects?.length ? (
+                <div className={styles.projectGrid}>
+                  {section.projects.map((project) => (
+                    <article key={project.href} className={styles.projectCard}>
+                      <div
+                        className={styles.projectPreview}
+                        style={{
+                          background: `linear-gradient(135deg, ${project.preview.from}, ${project.preview.to})`,
+                          color: project.preview.text,
+                        }}
+                      >
+                        <span className={styles.projectPreviewKicker}>
+                          {project.preview.kicker}
+                        </span>
+                        <h3 className={styles.projectPreviewTitle}>
+                          {project.preview.title}
+                        </h3>
+                        <p className={styles.projectPreviewCaption}>
+                          {project.preview.caption}
+                        </p>
+                      </div>
+                      <div className={styles.projectBody}>
+                        <div className={styles.projectHeading}>
+                          <h3 className={styles.projectName}>{project.name}</h3>
+                          {project.badge ? (
+                            <span className={styles.projectBadge}>{project.badge}</span>
+                          ) : null}
+                        </div>
+                        <p className={styles.projectSummary}>{project.summary}</p>
+                        <div className={styles.projectTags}>
+                          {project.tags.map((tag) => (
+                            <span key={tag} className={styles.projectTag}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <Link
+                          href={project.href}
+                          className={styles.projectAction}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View project
+                        </Link>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : null}
               {section.links?.length ? (
                 <ul className={styles.entryLinks}>
                   {section.links.map((link) => (
